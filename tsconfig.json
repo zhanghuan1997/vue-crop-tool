@@ -12,7 +12,8 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env"
+      "webpack-env",
+      "element-ui"
     ],
     "paths": {
       "@/*": [
@@ -35,5 +36,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "defaultSeverity": "none",
 }

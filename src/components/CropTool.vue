@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 <template>
-<div class="crop-tool">
+  <el-dialog
+    v-model="dialogVisible"
+    title="Tips"
+    width="30%"
+  >
+    <div class="crop-tool">
   <vueCropper
   ref="cropper"
   :img="option.img"
@@ -29,14 +34,15 @@
       <el-button type="primary" @click="clearPhoto">清除图片</el-button>
     </el-col>
     <el-col :span="8">
-      <el-button type="primary">下载图片</el-button>
+      <el-button type="primary" @click="downLoadPhoto">下载图片</el-button>
     </el-col>
   </el-row>
 </div>
+  </el-dialog>
 
 </template>
 <script lang="ts">
-import { reactive ,toRefs} from 'vue'
+import { reactive ,Ref,ref,toRefs} from 'vue'
 import { ElMessage } from 'element-plus'
 interface File<T>{
   raw: T,
@@ -48,8 +54,10 @@ export default {
   name: 'CropTool',
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() { 
+    const cropper:Ref = ref(null)
     // reactive 数据双向绑定
     const data = reactive({
+      dialogVisible:true,
       option:{
         img: 'https://img2.baidu.com/it/u=2673052903,3733944713&fm=26&fmt=auto', // 裁剪图片的地址
         outputSize:1,	//裁剪生成图片的质量
@@ -78,13 +86,22 @@ export default {
       },
       clearPhoto(){
         data.option.img = ''
+      },
+      downLoadPhoto(){
+        let aLink = document.createElement('a')
+        aLink.download = '图片'
+        cropper.value.getCropBlob((data:unknown)=>{
+          aLink.href = window.URL.createObjectURL(data)
+          aLink.click()
+        })
       }
     }
 
     return {
       // toRefs转换为响应式数据
       ...toRefs(data),
-      ...methods
+      ...methods,
+      cropper
     }
   }
 }
