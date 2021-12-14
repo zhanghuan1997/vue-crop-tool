@@ -1,9 +1,10 @@
 <template>
-<crop-tool></crop-tool>
+<crop-tool v-model:visible="bbb"></crop-tool>
+<el-button type="primary" @click="aaa">点击上传</el-button>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent,reactive,toRefs } from 'vue';
 import CropTool from './components/CropTool.vue'
 
 export default defineComponent({
@@ -11,6 +12,21 @@ export default defineComponent({
   components: {
     CropTool
   },
+  setup(){
+    const data = reactive({
+      bbb:false
+    })
+    const methods = {
+      aaa(){
+        data.bbb = true
+      }
+    }
+
+    return{
+      ...methods,
+      ...toRefs(data)
+    }
+  }
 });
 </script>
 
